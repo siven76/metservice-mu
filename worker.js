@@ -5,7 +5,7 @@ export default {
         const proxyDomain = "www.metservice.mu"; // Your custom domain
 
         // Construct the new URL to fetch from the original site
-        const targetUrl = "http://" + originalDomain + url.pathname + url.search;
+        const targetUrl = "https://" + originalDomain + url.pathname + url.search;
 
         // Fetch the response from the original website
         let response = await fetch(targetUrl, {
