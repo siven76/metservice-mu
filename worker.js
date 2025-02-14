@@ -15,24 +15,18 @@ export default {
             }
         });
 
-        // Check if the response is HTML
-        let contentType = response.headers.get("Content-Type") || "";
-        if (contentType.includes("text/html")) {
+        // If the response is HTML, replace all instances of the original domain
+        if (contentType.includes("text/html") || contentType.includes("javascript") || contentType.includes("css")) {
             let body = await response.text();
-
-            // Replace all occurrences of the original domain with the proxy domain
             body = body.replace(new RegExp(originalDomain, "g"), proxyDomain);
-
-            // Return the modified response
+            
             return new Response(body, {
                 status: response.status,
-                headers: {
-                    "Content-Type": "text/html"
-                }
+                headers: { "Content-Type": contentType }
             });
         }
 
-        // Return other content (CSS, JS, images, etc.) unchanged
+        // Return other content types (images, etc.) unchanged
         return response;
     }
 };
