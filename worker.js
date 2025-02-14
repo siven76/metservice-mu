@@ -7,7 +7,7 @@ export default {
         console.log(`Fetching: ${url.href}`);
 
         // Construct the target URL
-        const targetUrl = "http://" + originalDomain + url.pathname + url.search;
+        const targetUrl = "https://" + originalDomain + url.pathname + url.search;
 
         let response = await fetch(targetUrl, {
             headers: {
