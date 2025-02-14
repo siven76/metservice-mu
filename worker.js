@@ -4,10 +4,11 @@ export default {
         const originalDomain = "metservice.intnet.mu"; // Original domain
         const proxyDomain = "www.metservice.mu"; // Your custom domain
 
+        console.log(`Fetching: ${url.href}`);
+
         // Construct the target URL
         const targetUrl = "https://" + originalDomain + url.pathname + url.search;
 
-        // Fetch the response from the original site
         let response = await fetch(targetUrl, {
             headers: {
                 "User-Agent": request.headers.get("User-Agent"),
@@ -15,15 +16,16 @@ export default {
             }
         });
 
-        // Clone response to modify headers
-        let modifiedResponse = new Response(response.body, response);
-        let contentType = modifiedResponse.headers.get("Content-Type") || "";
+        let contentType = response.headers.get("Content-Type") || "";
+        console.log(`Response Content-Type: ${contentType}`);
 
-        // If it's HTML, JavaScript, or CSS, rewrite all occurrences of the original domain
+        // Modify response body only if it's HTML, JavaScript, or CSS
         if (contentType.includes("text/html") || contentType.includes("javascript") || contentType.includes("css")) {
             let body = await response.text();
             
-            // Replace all instances of the old domain with the new one
+            console.log(`Modifying response from ${originalDomain} to ${proxyDomain}`);
+
+            // Replace all instances of the original domain
             body = body.replace(new RegExp(originalDomain, "g"), proxyDomain);
 
             return new Response(body, {
@@ -34,7 +36,7 @@ export default {
             });
         }
 
-        // Return other content types (images, fonts, etc.) unchanged
+        // Return other content types unchanged
         return response;
     }
 };
