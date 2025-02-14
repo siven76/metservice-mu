@@ -1,0 +1,4 @@
+name = "metservice-mu"
+
+[observability.logs]
+enabled = true
