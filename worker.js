@@ -1,8 +1,8 @@
 export default {
     async fetch(request) {
         const url = new URL(request.url);
-        const originalDomain = "metservice.intnet.mu"; // Original domain
-        const proxyDomain = "www.metservice.mu"; // Your custom domain
+        const originalDomain = "metservice.intnet.mu";
+        const proxyDomain = "www.metservice.mu";
 
         // Construct the target URL
         const targetUrl = "http://" + originalDomain + url.pathname + url.search;
@@ -19,8 +19,6 @@ export default {
         // Modify response body only if it's HTML, JavaScript, or CSS
         if (contentType.includes("text/html") || contentType.includes("javascript") || contentType.includes("css")) {
             let body = await response.text();
-            
-            console.log(`Modifying response from ${originalDomain} to ${proxyDomain}`);
 
             // Replace HTTP links with HTTPS
             body = body.replace(new RegExp('http://' + originalDomain, "g"), 'https://' + proxyDomain);
