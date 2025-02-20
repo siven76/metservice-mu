@@ -20,6 +20,14 @@ export default {
         if (contentType.includes("text/html") || contentType.includes("javascript") || contentType.includes("css")) {
             let body = await response.text();
 
+            if (contentType.includes("text/html")) {
+                // Force Google to prefer the new domain with a strong canonical signal
+                body = body.replace(
+                    /<head>/i,
+                    `<head>\n<link rel="canonical" href="https://${proxyDomain}${url.pathname}" />\n<meta name="robots" content="index, follow">\n`
+                );
+            }
+
             // Replace HTTP links with HTTPS
             body = body.replace(new RegExp('http://' + originalDomain, "g"), 'https://' + proxyDomain);
 
